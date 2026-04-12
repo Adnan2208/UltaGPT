@@ -7,21 +7,6 @@ A Signup-free chat interface to chat with the latest large language models for f
 - **Access to Latest Models**: Interact with cutting-edge large language models.
 - **User-Friendly Interface**: Simple and intuitive design for seamless communication.
 
-## Project Structure
-```
-FreeLLM/
-├── backend/       # Backend server code
-│   ├── index.js   # Main server file
-│   ├── package.json # Backend dependencies
-├── frontend/      # Frontend application
-│   ├── src/       # React source files
-│   ├── public/    # Static assets
-│   ├── vite.config.js # Vite configuration
-│   ├── package.json # Frontend dependencies
-│   ├── index.html # Main HTML file
-├── README.md      # Project documentation
-```
-
 ## Getting Started
 
 ### Prerequisites
@@ -57,6 +42,3 @@ FreeLLM/
 
 ## Contributing
 Contributions are welcome! Feel free to open issues or submit pull requests.
-
-## License
-This project is licensed under the MIT License. See the LICENSE file for details.
