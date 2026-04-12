@@ -33,7 +33,7 @@ app.post('/chat', async (req, res) => {
     "model": "llama-3.1-8b-instant" // Hardcoded for rn.
     })
 
-    res.send(chatCompletion)
+    res.send(chatCompletion.choices[0].message.content).status(200);
 })
 
 
