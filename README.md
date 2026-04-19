@@ -19,26 +19,42 @@ A Signup-free chat interface to chat with the latest large language models for f
    git clone <repository-url>
    cd FreeLLM
    ```
-2. Install dependencies for both backend and frontend:
+2. Install frontend dependencies:
    ```bash
-   cd backend
-   npm install
-   cd ../frontend
+   cd frontend
    npm install
    ```
 
+### Environment Variables
+Create `frontend/.env` (or copy from `frontend/.env.example`) with:
+
+```bash
+VITE_BACKEND_URL="/api"
+GROQ_API_KEY="your_groq_api_key"
+```
+
 ### Running the Application
-1. Start the backend server:
-   ```bash
-   cd backend
-   npm start
-   ```
-2. Start the frontend development server:
+1. Start local development through Netlify (frontend + serverless functions):
    ```bash
    cd frontend
-   npm run dev
+   npx netlify dev
    ```
-3. Open your browser and navigate to `http://localhost:3000`.
+2. Open your browser and navigate to `http://localhost:8888`.
+
+## Deploying to Netlify
+1. Push this repo to GitHub/GitLab/Bitbucket.
+2. In Netlify, create a new site from the repository.
+3. Set `frontend` as the base directory.
+4. Build settings are already configured in `frontend/netlify.toml`:
+   - Build command: `npm run build`
+   - Publish directory: `dist`
+   - Functions directory: `netlify/functions`
+5. In Site Settings -> Environment Variables, add:
+   - `GROQ_API_KEY` = your Groq API key
+   - Optional: `VITE_BACKEND_URL` = `/api`
+6. Trigger deploy.
+
+After deployment, your frontend calls `/api/chat`, which is routed to Netlify Function `api`.
 
 ## Contributing
 Contributions are welcome! Feel free to open issues or submit pull requests.
