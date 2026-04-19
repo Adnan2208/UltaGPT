@@ -17,7 +17,11 @@ const textHeaders = {
 };
 
 export const handler = async (event) => {
-  const path = event.path.replace(/^\/.netlify\/functions\/api/, '') || '/';
+  const rawPath = event.path || '/';
+  const path =
+    rawPath
+      .replace(/^\/.netlify\/functions\/api/, '')
+      .replace(/^\/api/, '') || '/';
 
   if (event.httpMethod === 'OPTIONS') {
     return {
@@ -50,7 +54,7 @@ export const handler = async (event) => {
 
       const chatCompletion = await groq.chat.completions.create({
         messages: [{ role: 'user', content: message }],
-        model: 'llama-3.1-8b-instant',
+        model: 'moonshotai/Kimi-K2-Instruct-0905',
       });
 
       return {
