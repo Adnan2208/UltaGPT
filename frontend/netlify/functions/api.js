@@ -4,6 +4,8 @@ const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY,
 });
 
+const MODEL_NAME = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
+
 const defaultHeaders = {
   'Content-Type': 'application/json',
   'Access-Control-Allow-Origin': '*',
@@ -35,6 +37,14 @@ export const handler = async (event) => {
 
   if (event.httpMethod === 'POST') {
     try {
+      if (!process.env.GROQ_API_KEY) {
+        return {
+          statusCode: 500,
+          headers: defaultHeaders,
+          body: JSON.stringify({ error: 'Missing GROQ_API_KEY on server' }),
+        };
+      }
+
       const payload = event.body ? JSON.parse(event.body) : {};
       const message = payload.message?.trim();
 
@@ -48,7 +58,7 @@ export const handler = async (event) => {
 
       const chatCompletion = await groq.chat.completions.create({
         messages: [{ role: 'user', content: message }],
-        model: 'moonshotai/Kimi-K2-Instruct-0905',
+        model: MODEL_NAME,
       });
 
       return {
@@ -59,10 +69,13 @@ export const handler = async (event) => {
     } catch (error) {
       console.error('Groq chat error:', error);
 
+      const statusCode = error?.status || 500;
+      const detail = error?.error?.message || error?.message || 'Unknown Groq API error';
+
       return {
-        statusCode: 500,
+        statusCode,
         headers: defaultHeaders,
-        body: JSON.stringify({ error: 'Failed to generate response' }),
+        body: JSON.stringify({ error: 'Failed to generate response', detail }),
       };
     }
   }

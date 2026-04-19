@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '/.netlify/functions/api';
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '/api'
 
 function App() {
   const [messages, setMessages] = useState([])
@@ -41,11 +41,34 @@ function App() {
         body: JSON.stringify({ message: input }),
       })
 
-      const llm_Response = await response.text();
+      const llm_Response = await response.text()
 
-      setMessages(prev => [...prev, { role: 'assistant', content: llm_Response}])
+      if (!response.ok) {
+        let errorMessage = `API request failed with status ${response.status}`
+
+        try {
+          const parsedError = JSON.parse(llm_Response)
+          const detail = parsedError.detail || parsedError.error
+          if (detail) {
+            errorMessage = detail
+          }
+        } catch {
+          if (llm_Response) {
+            errorMessage = llm_Response
+          }
+        }
+
+        throw new Error(errorMessage)
+      }
+
+      if (llm_Response.trim().startsWith('<!DOCTYPE html')) {
+        throw new Error('Received HTML instead of model output')
+      }
+
+      setMessages(prev => [...prev, { role: 'assistant', content: llm_Response }])
     } catch (error) {
-      setMessages(prev => [...prev, { role: 'assistant', content: `Connection failed. Please try again.`}])
+      const errorMessage = error?.message || 'Connection failed. Please try again.'
+      setMessages(prev => [...prev, { role: 'assistant', content: `Request failed: ${errorMessage}` }])
     } finally {
       setIsLoading(false)
     }
