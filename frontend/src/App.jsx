@@ -119,8 +119,8 @@ function App() {
             <span className="brand-line" />
           </div>
           <h1 className="app-title">
-            <span className="title-text">FreeLLM</span>
-            <span className="title-accent">Assistant</span>
+            <span className="title-text">ULTA-GPT</span>
+            <span className="title-accent">Assistant Maybe?</span>
           </h1>
         </motion.div>
       </header>

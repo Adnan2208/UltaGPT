@@ -31,7 +31,7 @@ export const handler = async (event) => {
     return {
       statusCode: 200,
       headers: textHeaders,
-      body: 'Welcome to the FreeLLM API',
+      body: 'Welcome to the ULTAGPT API',
     };
   }
 
